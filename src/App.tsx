@@ -59,9 +59,12 @@ const footerLinks: Array<{ id: ScreenId; label: string; icon: typeof ShieldCheck
   { id: "contact", label: "聯絡方式", icon: Mail }
 ];
 
+const defaultAdsenseClientId = "ca-pub-2601433155827756";
+const configuredAdsenseClientId = import.meta.env.VITE_ADSENSE_CLIENT_ID?.trim() || defaultAdsenseClientId;
+
 const adsConfig = {
-  enabled: import.meta.env.VITE_ENABLE_ADSENSE === "true",
-  clientId: import.meta.env.VITE_ADSENSE_CLIENT_ID?.trim() ?? "",
+  enabled: import.meta.env.VITE_ENABLE_ADSENSE === "true" || import.meta.env.PROD,
+  clientId: configuredAdsenseClientId,
   slots: {
     left: import.meta.env.VITE_AD_SLOT_LEFT?.trim() ?? "",
     right: import.meta.env.VITE_AD_SLOT_RIGHT?.trim() ?? "",
