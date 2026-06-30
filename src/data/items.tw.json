@@ -1,0 +1,17 @@
+[
+  { "id": "gold", "english": "Gold", "tw": "金幣", "itemClass": "Stackable Currency", "category": "gold", "sourceUrl": "https://poe2db.tw/tw/" },
+  { "id": "divine-orb", "english": "Divine Orb", "tw": "神聖石", "itemClass": "Stackable Currency", "category": "currency", "sourceUrl": "https://poe2db.tw/tw/" },
+  { "id": "mirror", "english": "Mirror of Kalandra", "tw": "卡蘭德的魔鏡", "itemClass": "Stackable Currency", "category": "currency", "sourceUrl": "https://poe2db.tw/tw/" },
+  { "id": "chaos-orb", "english": "Chaos Orb", "tw": "混沌石", "itemClass": "Stackable Currency", "category": "currency", "sourceUrl": "https://poe2db.tw/tw/" },
+  { "id": "exalted-orb", "english": "Exalted Orb", "tw": "崇高石", "itemClass": "Stackable Currency", "category": "currency", "sourceUrl": "https://poe2db.tw/tw/" },
+  { "id": "waystone", "english": "Waystone", "tw": "換界石", "itemClass": "Waystones", "category": "waystone", "sourceUrl": "https://poe2db.tw/tw/" },
+  { "id": "uncut-skill-gem", "english": "Uncut Skill Gem", "tw": "未切割技能寶石", "itemClass": "Skill Gems", "category": "gems", "sourceUrl": "https://poe2db.tw/tw/" },
+  { "id": "uncut-support-gem", "english": "Uncut Support Gem", "tw": "未切割輔助寶石", "itemClass": "Support Gems", "category": "gems", "sourceUrl": "https://poe2db.tw/tw/" },
+  { "id": "emerald", "english": "Emerald", "tw": "翠綠寶珠", "itemClass": "Jewels", "category": "jewels", "sourceUrl": "https://poe2db.tw/tw/" },
+  { "id": "ruby", "english": "Ruby", "tw": "紅玉", "itemClass": "Jewels", "category": "jewels", "sourceUrl": "https://poe2db.tw/tw/" },
+  { "id": "breach-splinter", "english": "Breach Splinter", "tw": "裂痕裂片", "itemClass": "Stackable Currency", "category": "fragments", "sourceUrl": "https://poe2db.tw/tw/" },
+  { "id": "rune", "english": "Conductive Runes", "tw": "導電符文", "itemClass": "Socketable", "category": "runes", "sourceUrl": "https://poe2db.tw/tw/" },
+  { "id": "gold-ring", "english": "Gold Ring", "tw": "金光戒指", "itemClass": "Rings", "category": "unique", "sourceUrl": "https://poe2db.tw/tw/" },
+  { "id": "gemini-bow", "english": "Gemini Bow", "tw": "雙子弓", "itemClass": "Bows", "category": "endgame-rare", "sourceUrl": "https://poe2db.tw/tw/" },
+  { "id": "ultimate-life-flask", "english": "Ultimate Life Flask", "tw": "終極生命藥劑", "itemClass": "Life Flasks", "category": "flask", "sourceUrl": "https://poe2db.tw/tw/" }
+]

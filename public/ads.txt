@@ -1,0 +1,2 @@
+# Google AdSense 審核通過並取得發布商 ID 後，將下一行的 pub-0000000000000000 換成自己的 ID，並移除註解符號。
+# google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0
