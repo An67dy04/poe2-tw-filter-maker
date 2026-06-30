@@ -29,6 +29,7 @@ interface FilterState {
   updateRuleFontSize: (ruleId: string, value: number) => void;
   updateRuleColor: (ruleId: string, keyword: "SetTextColor" | "SetBorderColor" | "SetBackgroundColor", value: Rgba) => void;
   updateRuleSound: (ruleId: string, id: number | string, volume: number) => void;
+  updateRuleCustomSound: (ruleId: string, fileName: string, volume: number) => void;
   updateSettings: (settings: Partial<FilterSettings>) => void;
   addCustomHideRule: (input: CustomHideInput) => void;
   applyStrictnessProfileData: (profileData: StrictnessProfileData) => void;
@@ -170,7 +171,7 @@ function applyVisualThemeToRule(rule: FilterRule, themeId: keyof typeof themePal
   const palette = themePalettes[themeId][ruleImportance(rule)];
   const fontSize = ruleImportance(rule) === "premium" ? 45 : ruleImportance(rule) === "strong" ? 42 : ruleImportance(rule) === "useful" ? 40 : rule.directive === "Hide" ? 18 : 34;
   const iconSize = ruleImportance(rule) === "premium" ? 0 : ruleImportance(rule) === "strong" ? 1 : 2;
-  const base = { ...rule, actions: rule.actions.filter((action) => !["SetTextColor", "SetBorderColor", "SetBackgroundColor", "SetFontSize", "PlayAlertSound", "PlayEffect", "MinimapIcon"].includes(action.keyword)) };
+  const base = { ...rule, actions: rule.actions.filter((action) => !["SetTextColor", "SetBorderColor", "SetBackgroundColor", "SetFontSize", "PlayAlertSound", "CustomAlertSound", "PlayEffect", "MinimapIcon"].includes(action.keyword)) };
   if (ruleImportance(rule) === "hidden") {
     return upsertAction(upsertAction(upsertAction(upsertAction(base, { keyword: "SetFontSize", value: fontSize }), { keyword: "SetTextColor", value: palette.text }), { keyword: "SetBorderColor", value: palette.border }), { keyword: "SetBackgroundColor", value: palette.background });
   }
@@ -211,7 +212,12 @@ export const useFilterStore = create<FilterState>((set, get) => ({
     set({ sections, generatedFilter: buildFilter(sections, get().settings) });
   },
   updateRuleSound: (ruleId, id, volume) => {
-    const sections = updateRule(get().sections, ruleId, (rule) => upsertAction(rule, { keyword: "PlayAlertSound", id, volume }));
+    const sections = updateRule(get().sections, ruleId, (rule) => upsertAction({ ...rule, actions: rule.actions.filter((action) => action.keyword !== "CustomAlertSound") }, { keyword: "PlayAlertSound", id, volume }));
+    set({ sections, generatedFilter: buildFilter(sections, get().settings) });
+  },
+  updateRuleCustomSound: (ruleId, fileName, volume) => {
+    const safeFileName = fileName.replace(/[\\/:*?"<>|]/g, "").trim();
+    const sections = updateRule(get().sections, ruleId, (rule) => upsertAction({ ...rule, actions: rule.actions.filter((action) => action.keyword !== "PlayAlertSound") }, { keyword: "CustomAlertSound", fileName: safeFileName || "custom-alert.mp3", volume }));
     set({ sections, generatedFilter: buildFilter(sections, get().settings) });
   },
   updateSettings: (partial) => {

@@ -469,6 +469,7 @@ function playAlertSound(id: number | string, volume: number) {
 type ColorAction = { keyword: "SetTextColor" | "SetBorderColor" | "SetBackgroundColor"; value: Rgba };
 type SizeAction = { keyword: "SetFontSize"; value: number };
 type SoundAction = { keyword: "PlayAlertSound"; id: number | string; volume: number };
+type CustomSoundAction = { keyword: "CustomAlertSound"; fileName: string; volume: number };
 
 const soundOptions = [
   ["1", "1 - 預設提示 1"],
@@ -659,12 +660,33 @@ function Customize() {
   const updateRuleFontSize = useFilterStore((state) => state.updateRuleFontSize);
   const updateRuleColor = useFilterStore((state) => state.updateRuleColor);
   const updateRuleSound = useFilterStore((state) => state.updateRuleSound);
+  const updateRuleCustomSound = useFilterStore((state) => state.updateRuleCustomSound);
   const addCustomHideRule = useFilterStore((state) => state.addCustomHideRule);
   const [query, setQuery] = useState("");
+  const [customSoundUrls, setCustomSoundUrls] = useState<Record<string, string>>({});
   const [customHide, setCustomHide] = useState<CustomHideInput>({ itemClass: "Rings", rarity: "Normal", areaLevelMin: 65, itemLevelMax: 80, qualityMax: 0, identified: "any" });
   const activeSection = sections.find((section) => section.id === activeSectionId) ?? sections[0];
   const rules = activeSection.rules.filter((rule) => `${getRuleTitle(rule)} ${getRuleDescription(rule)} ${rule.title} ${rule.tierTag ?? ""}`.toLowerCase().includes(query.toLowerCase()));
   const showCustomHideForm = activeSection.id.includes("hide") || activeSection.id === "hiding" || activeSection.id === "leveling-useful-magic-and-normal-items";
+  useEffect(() => () => {
+    Object.values(customSoundUrls).forEach((url) => URL.revokeObjectURL(url));
+  }, [customSoundUrls]);
+
+  const handleCustomSoundFile = (ruleId: string, file: File, volume: number) => {
+    setCustomSoundUrls((current) => {
+      if (current[ruleId]) URL.revokeObjectURL(current[ruleId]);
+      return { ...current, [ruleId]: URL.createObjectURL(file) };
+    });
+    updateRuleCustomSound(ruleId, file.name, volume);
+  };
+
+  const playCustomSound = (ruleId: string, volume: number) => {
+    const src = customSoundUrls[ruleId];
+    if (!src) return;
+    const audio = new Audio(src);
+    audio.volume = Math.max(0, Math.min(1, volume / 300));
+    void audio.play();
+  };
 
   return (
     <section className="view split-view">
@@ -714,6 +736,7 @@ function Customize() {
           const sizeAction = findAction(rule, "SetFontSize") as SizeAction | undefined;
           const size = sizeAction?.value ?? 36;
           const sound = findAction(rule, "PlayAlertSound") as SoundAction | undefined;
+          const customSound = findAction(rule, "CustomAlertSound") as CustomSoundAction | undefined;
           return (
             <article className="rule-card" key={rule.id}>
               <div className="rule-top">
@@ -739,6 +762,164 @@ function Customize() {
                 <label>音量<input type="range" min="0" max="300" value={sound?.volume ?? 300} onChange={(event) => updateRuleSound(rule.id, sound?.id ?? 2, Number(event.target.value))} /></label>
                 <button className="inline-tool" type="button" onClick={() => playAlertSound(sound?.id ?? 2, sound?.volume ?? 300)}><Volume2 size={16} />試聽音效</button>
               </div>
+            </article>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+function CustomizeV2() {
+  const sections = useFilterStore((state) => state.sections);
+  const activeSectionId = useFilterStore((state) => state.activeSectionId);
+  const setActiveSection = useFilterStore((state) => state.setActiveSection);
+  const toggleRule = useFilterStore((state) => state.toggleRule);
+  const updateRuleFontSize = useFilterStore((state) => state.updateRuleFontSize);
+  const updateRuleColor = useFilterStore((state) => state.updateRuleColor);
+  const updateRuleSound = useFilterStore((state) => state.updateRuleSound);
+  const updateRuleCustomSound = useFilterStore((state) => state.updateRuleCustomSound);
+  const addCustomHideRule = useFilterStore((state) => state.addCustomHideRule);
+  const [query, setQuery] = useState("");
+  const [customSoundUrls, setCustomSoundUrls] = useState<Record<string, string>>({});
+  const [customHide, setCustomHide] = useState<CustomHideInput>({ itemClass: "Rings", rarity: "Normal", areaLevelMin: 65, itemLevelMax: 80, qualityMax: 0, identified: "any" });
+  const activeSection = sections.find((section) => section.id === activeSectionId) ?? sections[0];
+  const rules = activeSection.rules.filter((rule) => `${getRuleTitle(rule)} ${getRuleDescription(rule)} ${rule.title} ${rule.tierTag ?? ""}`.toLowerCase().includes(query.toLowerCase()));
+  const showCustomHideForm = activeSection.id.includes("hide") || activeSection.id === "hiding" || activeSection.id === "leveling-useful-magic-and-normal-items";
+
+  useEffect(() => () => {
+    Object.values(customSoundUrls).forEach((url) => URL.revokeObjectURL(url));
+  }, [customSoundUrls]);
+
+  const handleCustomSoundFile = (ruleId: string, file: File, volume: number) => {
+    setCustomSoundUrls((current) => {
+      if (current[ruleId]) URL.revokeObjectURL(current[ruleId]);
+      return { ...current, [ruleId]: URL.createObjectURL(file) };
+    });
+    updateRuleCustomSound(ruleId, file.name, volume);
+  };
+
+  const playCustomSound = (ruleId: string, volume: number) => {
+    const src = customSoundUrls[ruleId];
+    if (!src) return;
+    const audio = new Audio(src);
+    audio.volume = Math.max(0, Math.min(1, volume / 300));
+    void audio.play();
+  };
+
+  return (
+    <section className="view split-view">
+      <aside className="section-list">
+        <label className="search-box">
+          <Search size={16} />
+          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="搜尋規則" />
+        </label>
+        {sections.map((section) => (
+          <button key={section.id} className={section.id === activeSectionId ? "selected" : ""} onClick={() => setActiveSection(section.id)}>
+            {sectionTitleTw[section.id] ?? section.titleTw}
+          </button>
+        ))}
+      </aside>
+      <div className="rule-panel">
+        <div className="panel-title">
+          <h1>{sectionTitleTw[activeSection.id] ?? activeSection.titleTw}</h1>
+          <p>{sectionVisuals[activeSection.id]?.note ?? "調整這類掉落的顯示、顏色與音效。"}</p>
+        </div>
+
+        {showCustomHideForm ? (
+          <article className="rule-card custom-hide-card">
+            <div className="rule-top">
+              <div>
+                <h2>新增隱藏規則</h2>
+                <p>用簡單條件建立 Hide 規則，會放在最後安全顯示未知物品之前。</p>
+              </div>
+            </div>
+            <div className="control-grid">
+              <label>分類<select value={customHide.itemClass ?? ""} onChange={(event) => setCustomHide({ ...customHide, itemClass: event.target.value || undefined })}>
+                <option value="">不限分類</option>
+                {itemClassOptions.map((value) => <option key={value} value={value}>{translateItemName(value)}</option>)}
+              </select></label>
+              <label>稀有度<select value={customHide.rarity ?? ""} onChange={(event) => setCustomHide({ ...customHide, rarity: event.target.value || undefined })}>
+                <option value="">不限稀有度</option>
+                {["Normal", "Magic", "Rare", "Unique"].map((value) => <option key={value} value={value}>{rarityLabels[value]}</option>)}
+              </select></label>
+              <label>最低區域等級<input type="number" value={customHide.areaLevelMin ?? ""} onChange={(event) => setCustomHide({ ...customHide, areaLevelMin: event.target.value === "" ? undefined : Number(event.target.value) })} /></label>
+              <label>最高物品等級<input type="number" value={customHide.itemLevelMax ?? ""} onChange={(event) => setCustomHide({ ...customHide, itemLevelMax: event.target.value === "" ? undefined : Number(event.target.value) })} /></label>
+              <label>最高品質<input type="number" value={customHide.qualityMax ?? ""} onChange={(event) => setCustomHide({ ...customHide, qualityMax: event.target.value === "" ? undefined : Number(event.target.value) })} /></label>
+              <label>鑑定狀態<select value={customHide.identified ?? "any"} onChange={(event) => setCustomHide({ ...customHide, identified: event.target.value as CustomHideInput["identified"] })}>
+                <option value="any">不限</option>
+                <option value="identified">已鑑定</option>
+                <option value="unidentified">未鑑定</option>
+              </select></label>
+              <button className="inline-tool" type="button" onClick={() => addCustomHideRule(customHide)}>新增隱藏規則</button>
+            </div>
+          </article>
+        ) : null}
+
+        {rules.map((rule) => {
+          const sizeAction = findAction(rule, "SetFontSize") as SizeAction | undefined;
+          const size = sizeAction?.value ?? 36;
+          const sound = findAction(rule, "PlayAlertSound") as SoundAction | undefined;
+          const customSound = findAction(rule, "CustomAlertSound") as CustomSoundAction | undefined;
+          const soundVolume = customSound?.volume ?? sound?.volume ?? 300;
+          return (
+            <article className="rule-card" key={rule.id}>
+              <div className="rule-top">
+                <div>
+                  <h2>{getRuleTitle(rule)}</h2>
+                  <p>{getRuleDescription(rule)}</p>
+                </div>
+                <label className={`visibility-switch ${rule.enabled ? "is-shown" : "is-hidden"}`}>
+                  <input type="checkbox" checked={rule.enabled} onChange={() => toggleRule(rule.id)} />
+                  <span className="switch-track"><span className="switch-thumb" /></span>
+                  <strong>{rule.enabled ? <><Eye size={15} />顯示</> : <><EyeOff size={15} />隱藏</>}</strong>
+                </label>
+              </div>
+
+              <RulePreview rule={rule} />
+
+              <div className="control-grid">
+                <label>字體大小<input type="range" min="18" max="45" value={size} onChange={(event) => updateRuleFontSize(rule.id, Number(event.target.value))} /></label>
+                <ColorControl label="文字" rule={rule} keyword="SetTextColor" onChange={updateRuleColor} />
+                <ColorControl label="邊框" rule={rule} keyword="SetBorderColor" onChange={updateRuleColor} />
+                <ColorControl label="背景" rule={rule} keyword="SetBackgroundColor" onChange={updateRuleColor} />
+                <label>音效<select value={customSound ? "custom" : String(sound?.id ?? 2)} onChange={(event) => {
+                  if (event.target.value === "custom") {
+                    updateRuleCustomSound(rule.id, customSound?.fileName ?? "custom-alert.mp3", soundVolume);
+                    return;
+                  }
+                  updateRuleSound(rule.id, event.target.value, soundVolume);
+                }}>
+                  {soundOptions.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+                  <option value="custom">自訂音效</option>
+                </select></label>
+                <label>音量<input type="range" min="0" max="300" value={soundVolume} onChange={(event) => {
+                  const nextVolume = Number(event.target.value);
+                  if (customSound) updateRuleCustomSound(rule.id, customSound.fileName, nextVolume);
+                  else updateRuleSound(rule.id, sound?.id ?? 2, nextVolume);
+                }} /></label>
+                <button className="inline-tool" type="button" onClick={() => customSound ? playCustomSound(rule.id, customSound.volume) : playAlertSound(sound?.id ?? 2, sound?.volume ?? 300)} disabled={Boolean(customSound && !customSoundUrls[rule.id])}>
+                  <Volume2 size={16} />試聽音效
+                </button>
+              </div>
+
+              {customSound ? (
+                <div className="custom-sound-panel">
+                  <p>匯出後請把音效檔放在 `.filter` 同一個資料夾，檔名需保持一致：{customSound.fileName}</p>
+                  <label className="image-input">
+                    <ImageUp size={16} />
+                    選擇音效檔
+                    <input type="file" accept="audio/mpeg,audio/mp3,audio/wav,audio/ogg" onChange={(event) => {
+                      const file = event.currentTarget.files?.[0];
+                      if (file) handleCustomSoundFile(rule.id, file, customSound.volume);
+                    }} />
+                  </label>
+                  <button className="inline-tool" type="button" onClick={() => playCustomSound(rule.id, customSound.volume)} disabled={!customSoundUrls[rule.id]}>
+                    <Volume2 size={16} />試聽自訂音效
+                  </button>
+                  <button className="inline-tool" type="button" onClick={() => updateRuleSound(rule.id, 2, customSound.volume)}>改回預設音效</button>
+                </div>
+              ) : null}
             </article>
           );
         })}
@@ -1173,7 +1354,7 @@ function App() {
         </aside>
         <div className="content">
           {screen === "overview" && <Overview onOpenSection={openSection} />}
-          {screen === "customize" && <Customize />}
+          {screen === "customize" && <CustomizeV2 />}
           {screen === "simulate" && <Simulate />}
           {screen === "themes" && <Themes />}
           {screen === "advanced" && <Advanced />}

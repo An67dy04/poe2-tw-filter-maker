@@ -68,4 +68,34 @@ describe("filter DSL", () => {
     expect(profiles["Uber+1 Strict"].disabledRuleIds.length).toBeGreaterThan(profiles.Strict.disabledRuleIds.length);
     expect(profiles["Uber+1 Strict"].disabledRuleIds).not.toContain("final-show-unknown");
   });
+
+  it("renders custom alert sounds with quoted file names", () => {
+    const customFilter = generateFilter([
+      {
+        id: "custom-sound",
+        code: "9999",
+        title: "Custom Sound",
+        titleTw: "自訂音效",
+        rules: [
+          {
+            id: "custom-sound-rule",
+            sectionId: "custom-sound",
+            title: "Custom sound rule",
+            directive: "Show",
+            enabled: true,
+            descriptionTw: "自訂音效測試",
+            conditions: [{ keyword: "BaseType", values: ["Divine Orb"] }],
+            actions: [{ keyword: "CustomAlertSound", fileName: "my alert.mp3", volume: 300 }],
+            priority: 1
+          }
+        ]
+      }
+    ], {
+      author: "Test",
+      strictness: "Semi-Strict",
+      style: "Default",
+      version: "test"
+    });
+    expect(customFilter).toContain('CustomAlertSound "my alert.mp3" 300');
+  });
 });

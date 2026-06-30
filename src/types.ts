@@ -12,6 +12,7 @@ export type FilterAction =
   | { keyword: "SetFontSize"; value: number }
   | { keyword: "SetTextColor" | "SetBorderColor" | "SetBackgroundColor"; value: Rgba }
   | { keyword: "PlayAlertSound"; id: number | string; volume: number }
+  | { keyword: "CustomAlertSound"; fileName: string; volume: number }
   | { keyword: "PlayEffect"; color: BeamColor; temp?: boolean }
   | { keyword: "MinimapIcon"; size: 0 | 1 | 2; color: IconColor; shape: IconShape }
   | { keyword: "DisableDropSound"; value: boolean };

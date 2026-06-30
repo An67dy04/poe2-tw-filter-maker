@@ -725,6 +725,30 @@ button.image-input {
   opacity: 0;
 }
 
+.custom-sound-panel {
+  grid-column: 1 / -1;
+  border: 1px solid #34404a;
+  background: #12161b;
+  border-radius: 8px;
+  padding: 12px;
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) minmax(160px, 0.7fr) minmax(130px, 0.5fr);
+  gap: 10px;
+  align-items: end;
+}
+
+.custom-sound-panel p {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-size: 13px;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+  transform: none;
+}
+
 .advanced-sim {
   border: 1px solid #303841;
   border-radius: 8px;
@@ -1083,7 +1107,8 @@ button.image-input {
   .status-grid,
   .control-grid,
   .mini-grid,
-  .scenario-grid {
+  .scenario-grid,
+  .custom-sound-panel {
     grid-template-columns: 1fr;
   }
 

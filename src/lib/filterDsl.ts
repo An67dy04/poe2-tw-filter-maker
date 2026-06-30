@@ -30,6 +30,8 @@ export function renderAction(action: FilterAction): string {
       return `${action.keyword} ${action.value.r} ${action.value.g} ${action.value.b} ${action.value.a}`;
     case "PlayAlertSound":
       return `PlayAlertSound ${action.id} ${action.volume}`;
+    case "CustomAlertSound":
+      return `CustomAlertSound ${quote(action.fileName)} ${action.volume}`;
     case "PlayEffect":
       return `PlayEffect ${action.color}${action.temp ? " Temp" : ""}`;
     case "MinimapIcon":
