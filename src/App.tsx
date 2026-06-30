@@ -558,7 +558,10 @@ function StrictnessSlider({ compact = false }: { compact?: boolean }) {
 
 function AdsenseLoader() {
   useEffect(() => {
-    if (!canLoadAdsense || document.querySelector(`script[data-adsense-client="${adsConfig.clientId}"]`)) return;
+    const existingScript = document.querySelector(
+      `script[data-adsense-client="${adsConfig.clientId}"], script[src*="pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"][src*="${adsConfig.clientId}"]`
+    );
+    if (!canLoadAdsense || existingScript) return;
     const script = document.createElement("script");
     script.async = true;
     script.crossOrigin = "anonymous";
