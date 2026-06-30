@@ -1122,7 +1122,9 @@ function ContactView() {
       <h1>聯絡方式</h1>
       <article>
         <p>若發現翻譯、物品圖示、篩選器輸出或廣告顯示有問題，請透過專案頁面或站長公開聯絡方式回報。</p>
-        <p>目前可先透過 <a href="https://github.com/An67dy04/poe2-tw-filter-maker/issues" target="_blank" rel="noreferrer">GitHub Issues</a> 回報問題。Gmail 與 Discord 會在站長提供公開聯絡帳號後補上。</p>
+        <p>Gmail：<a href="mailto:a0202001234@gmail.com">a0202001234@gmail.com</a></p>
+        <p>Discord：black930</p>
+        <p>也可以透過 <a href="https://github.com/An67dy04/poe2-tw-filter-maker/issues" target="_blank" rel="noreferrer">GitHub Issues</a> 回報問題。</p>
       </article>
     </section>
   );
