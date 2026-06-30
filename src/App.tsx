@@ -1093,7 +1093,7 @@ function GuideView() {
       <h1>使用說明</h1>
       <article>
         <h2>基本流程</h2>
-        <p>先在總覽選擇嚴格度，再到自訂規則調整顯示、隱藏、顏色與音效。需要確認掉落效果時，可以使用掉落模擬。</p>
+        <p>先在總覽選擇嚴格度，再到自訂規則調整顯示、隱藏、顏色與音效。調整完成後，到匯出頁下載遊戲可讀取的 `.filter` 檔案。</p>
         <h2>匯出到遊戲</h2>
         <p>到匯出頁下載 `.filter`，放入 `%userprofile%/Documents/My Games/Path of Exile 2/`，再進入遊戲選取該過濾器。</p>
         <h2>繁中與英文語法</h2>
@@ -1122,7 +1122,7 @@ function ContactView() {
       <h1>聯絡方式</h1>
       <article>
         <p>若發現翻譯、物品圖示、篩選器輸出或廣告顯示有問題，請透過專案頁面或站長公開聯絡方式回報。</p>
-        <p>正式上線後，建議在這裡補上你的 Discord、Email 或 GitHub Issues 連結。</p>
+        <p>目前可先透過 <a href="https://github.com/An67dy04/poe2-tw-filter-maker/issues" target="_blank" rel="noreferrer">GitHub Issues</a> 回報問題。Gmail 與 Discord 會在站長提供公開聯絡帳號後補上。</p>
       </article>
     </section>
   );
