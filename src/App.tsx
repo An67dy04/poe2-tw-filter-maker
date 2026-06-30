@@ -1,5 +1,5 @@
 import Editor from "@monaco-editor/react";
-import { AlertTriangle, BookOpen, Check, ClipboardPaste, Download, Eye, EyeOff, FileCode2, FlaskConical, Gem, ImageUp, Layers3, Mail, Play, RefreshCcw, Save, Search, Settings2, ShieldCheck, Sparkles, Volume2 } from "lucide-react";
+import { AlertTriangle, BookOpen, Check, ClipboardPaste, Download, Eye, EyeOff, FileCode2, FlaskConical, Gem, ImageUp, Layers3, Mail, RefreshCcw, Save, Search, Settings2, ShieldCheck, Sparkles, Volume2 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import items from "./data/items.tw.json";
 import poe2dbTranslations from "./data/poe2dbTranslations.generated.json";
@@ -46,7 +46,6 @@ const itemClassOptions = [
 const screens: Array<{ id: ScreenId; label: string; icon: typeof Layers3 }> = [
   { id: "overview", label: "總覽", icon: Layers3 },
   { id: "customize", label: "自訂規則", icon: Settings2 },
-  { id: "simulate", label: "掉落模擬", icon: Play },
   { id: "themes", label: "外觀主題", icon: Sparkles },
   { id: "advanced", label: "進階工具", icon: FileCode2 },
   { id: "export", label: "匯出", icon: Download }
@@ -321,7 +320,7 @@ const themeNameTw: Record<string, string> = {
 };
 
 const sectionVisuals: Record<string, { icon: string; note: string }> = {
-  gold: { icon: "/icons/gold-coins.svg", note: "金幣堆與掉落顯示" },
+  gold: { icon: "/icons/gold-poe2db.webp", note: "金幣堆與掉落顯示" },
   "exotic-bases": { icon: "https://cdn.poe2db.tw/image/Art/2DItems/Belts/Basetypes/Belt09.webp", note: "高價傳奇基底，例如重革腰帶、金光戒指" },
   "exceptional-items": { icon: "https://cdn.poe2db.tw/image/Art/2DItems/Belts/Uniques/Headhunter.webp", note: "例外高價物品與超品質裝備" },
   "identified-mods-recombinator-mods": { icon: "https://cdn.poe2db.tw/image/Art/2DItems/Currency/CurrencyAddModToRare.webp", note: "已鑑定高價詞綴" },
@@ -359,7 +358,7 @@ const sectionVisuals: Record<string, { icon: string; note: string }> = {
 };
 
 const overviewFallbackIcons = [
-  "/icons/gold-coins.svg",
+  "/icons/gold-poe2db.webp",
   "https://cdn.poe2db.tw/image/Art/2DItems/Belts/Basetypes/Belt09.webp",
   "https://cdn.poe2db.tw/image/Art/2DItems/Maps/EndgameMaps/EndgameMap15.webp",
   "https://cdn.poe2db.tw/image/Art/2DItems/Jewels/EmeraldJewel.webp",
