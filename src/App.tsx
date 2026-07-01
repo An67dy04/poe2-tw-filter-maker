@@ -171,6 +171,9 @@ const rarityLabels: Record<string, string> = {
 };
 
 const ruleTitleTw: Record<string, string> = {
+  "uniques-4": "兩次汙染傳奇",
+  "uniques-5": "瓦爾詞綴傳奇",
+  "uniques-7": "高品質傳奇",
   "gold-stack-5000": "大量金幣",
   "gold-stack-650": "中量金幣",
   "exotic-chancing": "機會石基底",
